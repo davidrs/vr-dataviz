@@ -4,7 +4,7 @@ from mathutils import Vector
 import csv
 #from dateutil.parser import parse
 from datetime import datetime
-
+from math import ceil
 
 def run():  
    # Setup Scene.
@@ -34,12 +34,30 @@ def run():
    bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(3, 3, 23))
    bpy.ops.transform.rotate(value=0.45, axis=(-0.17, 0.98, -0.09), constraint_axis=(False, False, False), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
 
+   createCamera()
+
+def createCamera():
    # add camera
-   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(0, 0, 5), rotation=(1.5708,0,0))
+   # TODO: make this a better position
+   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(11, 17, 15), rotation=(1.5708,0,0))
+   # Camera is current selected item because we just created camera
    bpy.context.object.data.type = 'PANO'
    bpy.context.object.data.cycles.panorama_type = 'EQUIRECTANGULAR'
    # not working: bpy.context.scene.format = 'MPEG4'
    # not working: bpy.context.scene.codec = 'MPEG4'
+   
+   # set frame to frame 1
+   bpy.context.scene.frame_set(1)
+   # snapshot
+   bpy.ops.anim.keyframe_insert_menu(type='Location')
+   
+   # move camera to frame 300
+   bpy.context.scene.frame_set(ceil(bpy.context.scene.frame_end/3))
+   # move camera down
+   bpy.ops.transform.translate(value=(0,0,-5))
+   # snapshot (blender will interprit the movement between frames)
+   bpy.ops.anim.keyframe_insert_menu(type='Location')
+  
     
 def addLicenses():  
    #Add debug variable, if true, than only draw the first 20 cubes
@@ -62,15 +80,16 @@ def addLicenses():
            y = (float(row['X']) + 122.41) * 380
            x = (float(row['Y']) - 37.7) * 380
            
-           # move to frame 1
+           # set the starting frame
            bpy.context.scene.frame_set((float(issue_date[0]) - 1948)*10+ float(issue_date[1]) * 2 - 24)
            #bpy.ops.anim.change_frame(frame = 1)
            bpy.ops.mesh.primitive_cube_add(radius=0.9,location=(x,y,-1)) 
            ob = bpy.context.object
            me = ob.data
            
+           # TODO: abstract to external function
            # Get material
-           mat_name = "aaaMaterialxxz" + issue_date[0][:-1] #truncate last digit of year, to get decade.
+           mat_name = "aaMaterialxxz" + issue_date[0][:-1] #truncate last digit of year, to get decade.
            if bpy.data.materials.get(mat_name) is not None:
                 mat = bpy.data.materials[mat_name]
            else:
@@ -88,6 +107,8 @@ def addLicenses():
                 # no slots
                 ob.data.materials.append(mat)
            
+           # TODO: end of material
+           
            # create keyframe
            bpy.ops.anim.keyframe_insert_menu(type='Location')
            
@@ -99,9 +120,8 @@ def addLicenses():
            
            # create keyframe
            bpy.ops.anim.keyframe_insert_menu(type='Location')
-           
        
-
+    # TODO: remove all materials we've created and no longer need.
    return
 
 if __name__ == "__main__":
