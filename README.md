@@ -48,3 +48,10 @@ esc to stop playing the animation
 
 Shift + Left arrow: goes to frame 1 of animation.
 
+## Creating a VR animation
+We strongly recommend Youtube's Carboard for your viewing pleasure. 
+
+Under the Encoding subsection (on the right in Blender), confirm the format is MPEG-4 and the codec is set as MPEG-4(divx)
+
+Click run script and after the script is fully run, Under the Render subsections (on the right in Blender) click the animation button (this file will be saved at the location under the output subsection). 
+
