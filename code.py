@@ -45,7 +45,7 @@ def run():
 def addLicenses():  
    #Add debug variable, if true, than only draw the first 20 cubes
    DEBUG = True
-   MOD_DEBUG = 20 # to get a distributed sample.
+   MOD_DEBUG = 10 # to get a distributed sample.
    mod_counter = 0
    numberOfCubesPrinted = 0
    
@@ -62,18 +62,20 @@ def addLicenses():
            #print(row)
            issue_date = row['Orig_Iss_D'].split('/')
            # correct shift and scale for lat,long coordinates relative to london (which is 0,0)
-           y = (float(row['X']) + 122.41) * 380
-           x = (float(row['Y']) - 37.7) * 380
+           x = (float(row['X']) + 122.41) * 380
+           y = (float(row['Y']) - 37.7) * 380
            
            # move to frame 1
            bpy.context.scene.frame_set((float(issue_date[0]) - 1948)*10+ float(issue_date[1]) * 2 - 24)
            #bpy.ops.anim.change_frame(frame = 1)
-           bpy.ops.mesh.primitive_cube_add(radius=0.9,location=(x,y,-1)) 
+           bpy.ops.mesh.primitive_cube_add(radius=0.35,location=(x,y,-1)) 
+           bpy.ops.transform.resize(value=(1, 1, 1.4), constraint_axis=(False, False, True), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
+
            ob = bpy.context.object
            me = ob.data
            
            # Get material
-           mat_name = "aaaMaterialxxz" + issue_date[0][:-1] #truncate last digit of year, to get decade.
+           mat_name = "aaMaterialxxz" + issue_date[0][:-1] #truncate last digit of year, to get decade.
            if bpy.data.materials.get(mat_name) is not None:
                 mat = bpy.data.materials[mat_name]
            else:
@@ -98,7 +100,7 @@ def addLicenses():
            appear_frame = (float(issue_date[0]) - 1948)*10 + float(issue_date[1]) * 2
            bpy.context.scene.frame_set(appear_frame)
            # do something with the object. A translation, in this case
-           bpy.ops.transform.translate(value=(0,0,1.8))
+           bpy.ops.transform.translate(value=(0,0,2.0))
            
            # create keyframe
            bpy.ops.anim.keyframe_insert_menu(type='Location')
