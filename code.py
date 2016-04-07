@@ -40,25 +40,22 @@ def run():
    bpy.context.object.data.cycles.panorama_type = 'EQUIRECTANGULAR'
    # not working: bpy.context.scene.format = 'MPEG4'
    # not working: bpy.context.scene.codec = 'MPEG4'
-
     
 def addLicenses():  
    #Add debug variable, if true, than only draw the first 20 cubes
    DEBUG = True
-   MOD_DEBUG = 20 # to get a distributed sample.
+   MOD_DEBUG = 10 # to get a distributed sample.
    mod_counter = 0
-   numberOfCubesPrinted = 0
    
-   #reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/alcohol_locations.csv', newline=''), delimiter=',')
-   reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/alcohol_locations.csv', newline=''), delimiter=',')
+   reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/alcohol_locations.csv', newline=''), delimiter=',')
+   #reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/alcohol_locations.csv', newline=''), delimiter=',')
 
    for row in reader:
        #print(row['License_Ty'])v
        mod_counter = mod_counter + 1
-       if row['License_Ty'] == '21' and (not DEBUG or DEBUG and (mod_counter% MOD_DEBUG) == 0):
-           numberOfCubesPrinted = numberOfCubesPrinted + 1
-           if numberOfCubesPrinted == 50 and DEBUG == True:
-                break
+       if row['License_Ty'] == '21':
+           if DEBUG and (mod_counter% MOD_DEBUG) != 0:
+               continue;
            #print(row)
            issue_date = row['Orig_Iss_D'].split('/')
            # correct shift and scale for lat,long coordinates relative to london (which is 0,0)
