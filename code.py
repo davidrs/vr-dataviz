@@ -6,39 +6,90 @@ import csv
 from datetime import datetime
 
 
-def run():    
-   #Add debug variable, if true, than only draw the first 20 cubes
-   DEBUG = True
-   numberOfCubesPrinted = 0
-   
+def run():  
+   # Setup Scene.
    scn = bpy.context.scene
    scn.frame_start = 1
    scn.frame_end = 801
-   reader = csv.DictReader(open('/Users/nickbreen/Downloads/alcohol_locations.csv', newline=''), delimiter=',')
    bpy.context.scene.layers[2] = True
    
    # Add a plane
-   bpy.ops.mesh.primitive_plane_add(radius=10, location=(0, 0, 0), layers=(False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False))
+   bpy.ops.mesh.primitive_plane_add(radius=80, location=(0, 0, 0))
+   mat_name = 'water'
+   if bpy.data.materials.get(mat_name) is not None:
+        mat = bpy.data.materials[mat_name]
+   else:
+        # create material
+        mat = bpy.data.materials.new(name=mat_name)
+        mat.diffuse_color = (0.74,0.74,1.0)
+   # assign to 1st material slot
+   ob = bpy.context.object
+   ob.data.materials.append(mat)
+    
+   addLicenses()
+   
+   #add two suns, not standard practice...
+   bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(0, 0, 20))
+   bpy.ops.transform.rotate(value=0.45, axis=(-0.172023, 0.980755, -0.0923435), constraint_axis=(False, False, False), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
+   bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(3, 3, 23))
+   bpy.ops.transform.rotate(value=0.45, axis=(-0.17, 0.98, -0.09), constraint_axis=(False, False, False), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
 
+   # add camera
+   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(0, 0, 5), rotation=(1.5708,0,0))
+   bpy.context.object.data.type = 'PANO'
+   bpy.context.object.data.cycles.panorama_type = 'EQUIRECTANGULAR'
+   # not working: bpy.context.scene.format = 'MPEG4'
+   # not working: bpy.context.scene.codec = 'MPEG4'
+
+    
+def addLicenses():  
+   #Add debug variable, if true, than only draw the first 20 cubes
+   DEBUG = True
+   MOD_DEBUG = 20 # to get a distributed sample.
+   mod_counter = 0
+   numberOfCubesPrinted = 0
+   
+   #reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/alcohol_locations.csv', newline=''), delimiter=',')
+   reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/alcohol_locations.csv', newline=''), delimiter=',')
 
    for row in reader:
-       #print(row['License_Ty'])
-       if row['License_Ty'] == '21':
+       #print(row['License_Ty'])v
+       mod_counter = mod_counter + 1
+       if row['License_Ty'] == '21' and (not DEBUG or DEBUG and (mod_counter% MOD_DEBUG) == 0):
            numberOfCubesPrinted = numberOfCubesPrinted + 1
-           if numberOfCubesPrinted == 100 and DEBUG == True:
+           if numberOfCubesPrinted == 50 and DEBUG == True:
                 break
-           print(row)
+           #print(row)
            issue_date = row['Orig_Iss_D'].split('/')
            # correct shift and scale for lat,long coordinates relative to london (which is 0,0)
-           y = (float(row['X']) + 122.41) * 130
-           x = (float(row['Y']) - 37.7) * 130
+           y = (float(row['X']) + 122.41) * 380
+           x = (float(row['Y']) - 37.7) * 380
            
            # move to frame 1
            bpy.context.scene.frame_set((float(issue_date[0]) - 1948)*10+ float(issue_date[1]) * 2 - 24)
            #bpy.ops.anim.change_frame(frame = 1)
-           bpy.ops.mesh.primitive_cube_add(radius=0.3,location=(x,y,-1)) 
+           bpy.ops.mesh.primitive_cube_add(radius=0.9,location=(x,y,-1)) 
            ob = bpy.context.object
            me = ob.data
+           
+           # Get material
+           mat_name = "aaaMaterialxxz" + issue_date[0][:-1] #truncate last digit of year, to get decade.
+           if bpy.data.materials.get(mat_name) is not None:
+                mat = bpy.data.materials[mat_name]
+           else:
+                # create material
+                mat = bpy.data.materials.new(name=mat_name)
+                color = 0.15 * (float(issue_date[0][:-1]) - 194)
+                print(color)
+                mat.diffuse_color = (color,0.7,0.7)
+           
+           # Assign it to object
+           if len(ob.data.materials):
+                # assign to 1st material slot
+                ob.data.materials[0] = mat
+           else:
+                # no slots
+                ob.data.materials.append(mat)
            
            # create keyframe
            bpy.ops.anim.keyframe_insert_menu(type='Location')
@@ -47,9 +98,7 @@ def run():
            appear_frame = (float(issue_date[0]) - 1948)*10 + float(issue_date[1]) * 2
            bpy.context.scene.frame_set(appear_frame)
            # do something with the object. A translation, in this case
-           bpy.ops.transform.translate(value=(0,0,1.5))
-           
-           # todo sset the colour.
+           bpy.ops.transform.translate(value=(0,0,1.8))
            
            # create keyframe
            bpy.ops.anim.keyframe_insert_menu(type='Location')
