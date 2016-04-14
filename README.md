@@ -1,7 +1,7 @@
 # vr-dataviz
 Blender project rendered as a 360 video to data viz  geo spatial csvs.
 
-## Demo
+## Demo (Open on your Phone for Best Experience)
 https://www.youtube.com/watch?v=mL7tVlfyWhk
 
 ![Alt text](sample.png?raw=true "Sample Render")
@@ -37,6 +37,12 @@ Run the script
 
 Alt+s to save the code.
 
+
+## TODOs
+- Make the lat, lng shift & scale more generic, less hardcoded.
+- Find solution to no legend for colours.
+- Cleanely seperate config values from generic code.
+- Add a second city
 
 
 
