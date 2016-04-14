@@ -1,6 +1,10 @@
 # vr-dataviz
 Blender project rendered as a 360 video to data viz  geo spatial csvs.
 
+## Demo
+https://www.youtube.com/watch?v=mL7tVlfyWhk
+
+![Alt text](sample.png?raw=true "Sample Render")
 
 ## Running the code
 

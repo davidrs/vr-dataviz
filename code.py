@@ -38,8 +38,7 @@ def run():
 
 def createCamera():
    # add camera
-   # TODO: make this a better position
-   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(11, 17, 15), rotation=(1.5708,0,0))
+   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(-24, 50, 3.66), rotation=(1.5708,0,3.14159))
    # Camera is current selected item because we just created camera
    bpy.context.object.data.type = 'PANO'
    bpy.context.object.data.cycles.panorama_type = 'EQUIRECTANGULAR'
@@ -52,21 +51,27 @@ def createCamera():
    bpy.ops.anim.keyframe_insert_menu(type='Location')
    
    # move camera to frame 300
-   bpy.context.scene.frame_set(ceil(bpy.context.scene.frame_end/3))
+   bpy.context.scene.frame_set(ceil(bpy.context.scene.frame_end/2))
    # move camera down
-   bpy.ops.transform.translate(value=(0,0,-5))
+   bpy.ops.transform.translate(value=(23, -18, -0.6))
    # snapshot (blender will interprit the movement between frames)
    bpy.ops.anim.keyframe_insert_menu(type='Location')
-  
+     
+   # near last frame
+   bpy.context.scene.frame_set(bpy.context.scene.frame_end-15)
+   # move camera up
+   bpy.ops.transform.translate(value=(0,0, 5))
+   # snapshot (blender will interprit the movement between frames)
+   bpy.ops.anim.keyframe_insert_menu(type='Location')
     
 def addLicenses():  
    #Add debug variable, if true, than only draw the first 20 cubes
-   DEBUG = True
-   MOD_DEBUG = 10 # to get a distributed sample.
+   DEBUG = False
+   MOD_DEBUG = 5# to get a distributed sample.
    mod_counter = 0
    
-   reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/alcohol_locations.csv', newline=''), delimiter=',')
-   #reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/alcohol_locations.csv', newline=''), delimiter=',')
+   #reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/alcohol_locations.csv', newline=''), delimiter=',')
+   reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/alcohol_locations.csv', newline=''), delimiter=',')
 
    for row in reader:
        #print(row['License_Ty'])v
