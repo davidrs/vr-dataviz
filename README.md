@@ -28,6 +28,22 @@ Open 'text editor' view.
 Open the code.py file.
 
 
+### Datasets
+
+SF new units: https://data.sfgov.org/Housing-and-Buildings/San-Francisco-Development-Pipeline-2014-Quarter-3/n5ik-nmm3
+(Requires geocoding)
+
+Eviction notices: https://data.sfgov.org/Housing-and-Buildings/Eviction-Notices/5cei-gny5
+(Customer locations column)
+
+Ottawa publicly accesible computers: http://data.ottawa.ca/dataset/publicly-accessible-computers/resource/58c74f28-3656-4c76-8112-331a3478c8d2
+(Requires geocoding)
+
+Ottawa, health inspection data: http://data.ottawa.ca/dataset/public-health-inspection-data/resource/a308afdd-6bc6-4c6e-842f-c8f8a321e79d
+
+Istanbul: Twitter API for location data?
+
+
 
 
 ### Normal Dev
