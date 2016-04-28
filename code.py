@@ -70,7 +70,32 @@ def createCamera():
    bpy.ops.anim.keyframe_insert_menu(type='Location')
     
 
-# TODO: get the data from a csv. Return an array of objects of the form:
+# Return an array of objects of the form:
+# {x: 123, y:32, z:22, startFrame: 1234, colour: (0.5, 0.2, 0.8), colourName: 'someNameForThisColour'}
+def getOttawaData():
+  return_data = []
+  mod_counter = 0
+
+  #reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/ottawa-publicly-accesible-computers.csv', newline=''), delimiter=',')
+  reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/ottawa-publicly-accesible-computers.csv', newline=''), delimiter=',')
+  for row in reader:
+    #print(row['License_Ty'])
+    mod_counter = mod_counter + 1
+    if DEBUG and (mod_counter% MOD_DEBUG) != 0:
+         continue;
+
+      return_data.append({
+        'x': (float(row['latitude']) + 122.41) * 380, 
+        'y': (float(row['longitude']) - 37.7) * 380,
+        'z': -1,
+        'startFrame': mod_counter * 10,
+        'colour': (0.6, 0.9, 0.6),
+        'colourName': "MaterialOttawa"
+      })
+
+  return return_data
+
+# Return an array of objects of the form:
 # {x: 123, y:32, z:22, startFrame: 1234, colour: (0.5, 0.2, 0.8), colourName: 'someNameForThisColour'}
 def getSFAlcoholData():
   # Add debug variable, if true, than only draw the first 20 cubes
