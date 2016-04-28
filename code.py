@@ -13,8 +13,9 @@ def run():
    scn.frame_end = 801
    bpy.context.scene.layers[2] = True
     
-   sfAlcoholData = getSFAlcoholData()
-   addObjects(sfAlcoholData)
+   #dataToMap = getSFAlcoholData()
+   dataToMap = getOttawaData()
+   addObjects(dataToMap)
    
    # Add two suns, not standard practice...but best lighting.
    bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(0, 0, 20))
@@ -73,25 +74,27 @@ def createCamera():
 # Return an array of objects of the form:
 # {x: 123, y:32, z:22, startFrame: 1234, colour: (0.5, 0.2, 0.8), colourName: 'someNameForThisColour'}
 def getOttawaData():
+  DEBUG=False
   return_data = []
   mod_counter = 0
 
-  #reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/ottawa-publicly-accesible-computers.csv', newline=''), delimiter=',')
-  reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/ottawa-publicly-accesible-computers.csv', newline=''), delimiter=',')
+  #reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/ottawa-publicly-accessible-computers.csv', newline=''), delimiter=',')
+  reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/ottawa-publicly-accessible-computers.csv', newline=''), delimiter=',')
   for row in reader:
     #print(row['License_Ty'])
     mod_counter = mod_counter + 1
     if DEBUG and (mod_counter% MOD_DEBUG) != 0:
          continue;
-
-      return_data.append({
-        'x': (float(row['latitude']) + 122.41) * 380, 
-        'y': (float(row['longitude']) - 37.7) * 380,
+    return_data.append({
+        'x': (float(row['longitude']) + 75.66) * 80,
+        'y': (float(row['latitude']) - 45.44) * 80,
         'z': -1,
         'startFrame': mod_counter * 10,
         'colour': (0.6, 0.9, 0.6),
         'colourName': "MaterialOttawa"
-      })
+    })
+     
+  print(return_data)
 
   return return_data
 
@@ -123,7 +126,6 @@ def getSFAlcoholData():
         'colour': (0.15 * (float(issue_date[0][:-1]) - 194), 0.7, 0.7),
         'colourName': "aaMaterialxxz" + issue_date[0][:-1] # Truncate last digit of year, to get decade.
       })
-      #print(row)
 
   return return_data
 
@@ -156,7 +158,7 @@ def addObjects(all_points):
      else:
           # create material
           mat = bpy.data.materials.new(name=mat_name)
-          mat.diffuse_color = point[colour]
+          mat.diffuse_color = point['colour']
      
      # Assign it to object
      if len(ob.data.materials):
