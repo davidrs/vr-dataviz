@@ -47,6 +47,8 @@ Istanbul: Twitter API for location data?
 
 
 ### Normal Dev
+pip install geopy (used for geocoding addresses into lat and longs)
+
 Change the code
 
 Run the script
