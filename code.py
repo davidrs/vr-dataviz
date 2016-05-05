@@ -17,13 +17,18 @@ def run():
    scn.frame_end = 801
    bpy.context.scene.layers[2] = True
     
-   #TODO: switch statement off of global config for city. 
-   #dataToMap = getSfData()
-   dataToMap = getOttawaData()
-   addObjects(dataToMap)
-   createOttawaCamera()
+   #TODO: switch statement off of global config for city.
+
+   #addObjects(getOttawaData())
+   #createOttawaCamera()
+
+   #addObjects(getSfData())
    #createSfCamera()
    
+   addObjects(getIstanbulData())
+   createIstanbulCamera()
+
+
    # Add two suns, not standard practice...but best lighting.
    bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(0, 0, 20))
    bpy.ops.transform.rotate(value=0.45, axis=(-0.172023, 0.980755, -0.0923435), constraint_axis=(False, False, False), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
@@ -78,6 +83,35 @@ def createOttawaCamera():
    bpy.ops.anim.keyframe_insert_menu(type='Location')
     
 def createSfCamera():
+
+   # add camera
+   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(-24, 50, 3.66), rotation=(1.5708,0,3.14159))
+   # Camera is current selected item because we just created camera
+   bpy.context.object.data.type = 'PANO'
+   bpy.context.object.data.cycles.panorama_type = 'EQUIRECTANGULAR'
+   # not working: bpy.context.scene.format = 'MPEG4'
+   # not working: bpy.context.scene.codec = 'MPEG4'
+   
+   # set frame to frame 1
+   bpy.context.scene.frame_set(1)
+   # snapshot
+   bpy.ops.anim.keyframe_insert_menu(type='Location')
+   
+   # move camera to frame 300
+   bpy.context.scene.frame_set(ceil(bpy.context.scene.frame_end/2))
+   # move camera down
+   bpy.ops.transform.translate(value=(23, -18, -0.6))
+   # snapshot (blender will interprit the movement between frames)
+   bpy.ops.anim.keyframe_insert_menu(type='Location')
+     
+   # near last frame
+   bpy.context.scene.frame_set(bpy.context.scene.frame_end - 15)
+   # move camera up
+   bpy.ops.transform.translate(value=(0,0, 5))
+   # snapshot (blender will interprit the movement between frames)
+   bpy.ops.anim.keyframe_insert_menu(type='Location')
+    
+def createIstanbulCamera():
 
    # add camera
    bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(-24, 50, 3.66), rotation=(1.5708,0,3.14159))
@@ -187,14 +221,16 @@ def getIstanbulData():
     if DEBUG and (mod_counter% MOD_DEBUG) != 0:
          continue;
 
-      return_data.append({
-        'x': (float(row['lng']) - 29) * 380, 
-        'y': (float(row['lat']) - 40.9) * 380,
-        'z': (float(row['follower_count']) / 100),
-        'startFrame': mod_counter,
-        'colour': (0.15, 0.7, 0.7), #TODO off of row["source"]
-        'colourName': "tweet" # Truncate last digit of year, to get decade.
-      })
+    return_data.append({
+      'x': (float(row['lng']) - 28.996) * 1180, 
+      'y': (float(row['lat']) - 41.008) * 1390,
+      'z': (float(row['follower_count']) / 100 + 0.2),
+      'startFrame': mod_counter,
+      'colour': (0.15, 0.7, 0.7), #TODO off of row["source"]
+      'colourName': "tweet" # Truncate last digit of year, to get decade.
+    })
+    #if mod_counter>3:
+    #b4    break
 
   return return_data
 
