@@ -126,8 +126,8 @@ def getOttawaData():
     #print(row["ADDRESS_EN"])
     #TODO: helper to get lat,lng max, min, and avg to avoid manual calbiration.
     return_data.append({
-        'x': (float(row['longitude']) + 75.63) * 120,
-        'y': (float(row['latitude']) - 45.45) * 165,
+        'x': (float(row['lng']) + 75.63) * 120,
+        'y': (float(row['lat']) - 45.45) * 165,
         'z': float(row['COMPUTERS']),
         'startFrame': mod_counter + 3 * float(row['COMPUTERS']),
         'colour': (0.6, 0.9, 0.6),
@@ -153,7 +153,6 @@ def getSfData():
   #reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/data/alcohol_locations.csv', newline=''), delimiter=',')
   reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/data/alcohol_locations.csv', newline=''), delimiter=',')
   for row in reader:
-    #print(row['License_Ty'])
     mod_counter = mod_counter + 1
     if row['License_Ty'] == '21':
       if DEBUG and (mod_counter% MOD_DEBUG) != 0:
@@ -161,8 +160,8 @@ def getSfData():
 
       issue_date = row['Orig_Iss_D'].split('/')
       return_data.append({
-        'x': (float(row['X']) + 122.41) * 380, 
-        'y': (float(row['Y']) - 37.7) * 380,
+        'x': (float(row['lng']) + 122.41) * 380, 
+        'y': (float(row['lat']) - 37.7) * 380,
         'z': 1,
         'startFrame': (float(issue_date[0]) - 1948)*10+ float(issue_date[1]) * 2,
         'colour': (0.15 * (float(issue_date[0][:-1]) - 194), 0.7, 0.7),
@@ -184,14 +183,13 @@ def getIstanbulData():
   #reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/data/tweetsIstanbul.csv', newline=''), delimiter=',')
   reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/data/tweetsIstanbul.csv', newline=''), delimiter=',')
   for row in reader:
-    #print(row['License_Ty'])
     mod_counter = mod_counter + 1
     if DEBUG and (mod_counter% MOD_DEBUG) != 0:
          continue;
 
       return_data.append({
-        'x': (float(row['latitude']) - 29) * 380, 
-        'y': (float(row['longitude']) - 40.9) * 380,
+        'x': (float(row['lng']) - 29) * 380, 
+        'y': (float(row['lat']) - 40.9) * 380,
         'z': (float(row['follower_count']) / 100),
         'startFrame': mod_counter,
         'colour': (0.15, 0.7, 0.7), #TODO off of row["source"]
