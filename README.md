@@ -2,9 +2,15 @@
 Blender project rendered as a 360 video to data viz  geo spatial csvs.
 
 ## Demo (Open on your Phone for Best Experience)
-https://www.youtube.com/watch?v=mL7tVlfyWhk
+
+SF: https://www.youtube.com/watch?v=mL7tVlfyWhk
+Ottawa: https://youtu.be/pth3DSH8hTM
+Istanbu: https://www.youtube.com/watch?v=5qzAHcPoSqg
 
 ![Alt text](sample.png?raw=true "Sample Render")
+
+TODO: improve quality of render.
+
 
 ## Running the code
 

@@ -114,7 +114,7 @@ def createSfCamera():
 def createIstanbulCamera():
 
    # add camera
-   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(-24, 50, 3.66), rotation=(1.5708,0,3.14159))
+   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(-24, 50, 2.66), rotation=(1.5708,0,3.14159))
    # Camera is current selected item because we just created camera
    bpy.context.object.data.type = 'PANO'
    bpy.context.object.data.cycles.panorama_type = 'EQUIRECTANGULAR'
@@ -136,7 +136,7 @@ def createIstanbulCamera():
    # near last frame
    bpy.context.scene.frame_set(bpy.context.scene.frame_end - 15)
    # move camera up
-   bpy.ops.transform.translate(value=(0,0, 5))
+   bpy.ops.transform.translate(value=(0,0, 7))
    # snapshot (blender will interprit the movement between frames)
    bpy.ops.anim.keyframe_insert_menu(type='Location')
 
