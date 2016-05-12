@@ -15,7 +15,7 @@ def run():
    scn = bpy.context.scene
    scn.frame_start = 1
    scn.frame_end = 801
-   bpy.context.scene.layers[2] = True
+   bpy.context.scene.layers[3] = True
     
    #TODO: switch statement off of global config for city.
 
@@ -40,7 +40,7 @@ def run():
 
 def createWater():
    # Add a plane
-   bpy.ops.mesh.primitive_plane_add(radius=80, location=(0, 0, 0))
+   bpy.ops.mesh.primitive_plane_add(radius=100, location=(0, 0, 0))
    mat_name = 'water'
    if bpy.data.materials.get(mat_name) is not None:
         mat = bpy.data.materials[mat_name]
