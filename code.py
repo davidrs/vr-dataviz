@@ -7,7 +7,9 @@ from datetime import datetime
 from math import ceil
 
 # TODO: high level configs/globals CITY=sf,Ottawa, or istanbul, DEBUG=True or False
-
+CITY = "sf"
+DEBUG = False
+REPO_PATH
 
 
 def run():  
@@ -111,6 +113,7 @@ def createSfCamera():
    # snapshot (blender will interprit the movement between frames)
    bpy.ops.anim.keyframe_insert_menu(type='Location')
     
+
 def createIstanbulCamera():
 
    # add camera
@@ -198,7 +201,7 @@ def getSfData():
         'y': (float(row['lat']) - 37.7) * 380,
         'z': 1,
         'startFrame': (float(issue_date[0]) - 1948)*10+ float(issue_date[1]) * 2,
-        'colour': (0.15 * (float(issue_date[0][:-1]) - 194), 0.7, 0.7),
+        'colour': (0.20 * (float(issue_date[0][:-1]) - 194), 0.7, 0.7),
         'colourName': "aaMaterialxxz" + issue_date[0][:-1] # Truncate last digit of year, to get decade.
       })
 
