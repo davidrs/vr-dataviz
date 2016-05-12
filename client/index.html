@@ -5,10 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>VR Data Viz For Your Phone</title>
 
     <!-- Bootstrap -->
     <link href="libs/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -18,27 +20,27 @@
     <![endif]-->
   </head>
   <body>
-
-
-
       <div class="container">
         <div class="header">
-            <h3 class="text-muted pull-left">VR
-                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
-            </h3>
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Intro</a></li>
-              <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Experience</a></li>
-              <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Data</a></li>
-              <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Code</a></li>
-            </ul>
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">VR
+                        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+                    </a>
+                    <ul class="nav nav-tabs" role="tablist">
+                      <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Intro</a></li>
+                      <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Experience</a></li>
+                      <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Data</a></li>
+                      <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Code</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <!-- Tab panes -->
           <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="home">
-                <div class="jumbotron">
+                <div class="">
                     <h2>VR Data viz for your phone</h2>
                   <p class="lead">
                       VR <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> <span class="glyphicon glyphicon-phone" aria-hidden="true"></span> uses cities open source data to build VR videos for your phone.
@@ -48,8 +50,7 @@
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="profile">
-
-                <div class="jumbotron">
+                <div class="">
                     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                       <!-- Indicators -->
                       <ol class="carousel-indicators">
@@ -61,22 +62,28 @@
                       <!-- Wrapper for slides -->
                       <div class="carousel-inner" role="listbox">
                         <div class="item active">
-                          <img src="../sample.png" alt="">
-                          <div class="carousel-caption">
-                            SF
-                          </div>
+                            <a href="https://www.youtube.com/watch?v=mL7tVlfyWhk&index=3&list=PLXYeZ3VwLuLsYzMd9unp7_Ig_GJsjh3J8">
+                              <img src="../sample.png" alt="">
+                              <div class="carousel-caption">
+                                SF
+                              </div>
+                            </a>
                         </div>
                         <div class="item">
-                            <img src="../sample.png" alt="">
-                            <div class="carousel-caption">
-                              Ottawa
-                            </div>
+                            <a href="https://www.youtube.com/watch?v=5qzAHcPoSqg&index=2&list=PLXYeZ3VwLuLsYzMd9unp7_Ig_GJsjh3J8">
+                              <img src="../sample.png" alt="">
+                              <div class="carousel-caption">
+                                Istanbul
+                              </div>
+                            </a>
                         </div>
                         <div class="item">
-                            <img src="../sample.png" alt="">
-                            <div class="carousel-caption">
-                              Istanbul
-                            </div>
+                            <a href="https://www.youtube.com/watch?v=pth3DSH8hTM&index=1&list=PLXYeZ3VwLuLsYzMd9unp7_Ig_GJsjh3J8">
+                              <img src="../sample.png" alt="">
+                              <div class="carousel-caption">
+                                Ottawa
+                              </div>
+                            </a>
                         </div>
                       </div>
 
@@ -105,6 +112,12 @@
                     All our data comes from awesome open data sources:
                     <a href="https://data.sfgov.org/">SF OpenData</a>, <a href="http://data.ottawa.ca/">OpenData Ottawa</a>, and <a href="https://dev.twitter.com/streaming/overview">Twitter’s Streaming API</a>
                 </p>
+                <h3>Open data Sources</h3>
+                <ul>
+                    <li>Alchol Locations, San Francisco USA, <a href="https://data.sfgov.org/">SF OpenData</a>, <a href="../2d-map/index.html#alcohol_locations">2D Map</a></li>
+                    <li>Publicly Accessible Computers, Ottawa Canada, <a href="http://data.ottawa.ca/">OpenData Ottawa</a>, <a href="../2d-map/index.html#ottawa-publicly-accessible-computers">2D Map</a></li>
+                    <li>Tweets in Istanbul, Istanbul Turkey, <a href="https://dev.twitter.com/streaming/overview">Twitter’s Streaming API</a>, <a href="../2d-map/index.html#tweetsIstanbul">2D Map</a></li>
+                </ul>
                 <p>
                     More open data sources: <a href="http://www.opendata.gov">OpenData.gov</a>
                 </p>
@@ -118,7 +131,8 @@
 
 
         <div class="footer">
-          <p>&copy; Company 2013</p>
+    		<p class="authors-container">Made with love by <a href="http://www.davidrs.com">David Rust-Smith</a> and <a href="http://www.nickbreen.ca">Nick Breen</a></p>
+    		<a class="code-for-sf-link" href="http://codeforsanfrancisco.org/"><img src="img/c4sf.jpg" alt="Code for SF Brigade"/>A Code for SF project</a>
         </div>
 
 

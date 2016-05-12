@@ -1,0 +1,13 @@
+.footer {
+    height: 50px;
+}
+.code-for-sf-link {
+    position: relative;
+    top: -14px;
+}
+.code-for-sf-link img {
+    width: 50px;
+    top: 0px;
+    position: relative;
+    font-weight: bold;
+}
