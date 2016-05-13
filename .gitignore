@@ -1,4 +1,4 @@
-*.blend
+local.blend
 *.blend1
 *.DS_STORE
 animations/*

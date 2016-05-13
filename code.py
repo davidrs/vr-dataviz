@@ -7,9 +7,7 @@ from datetime import datetime
 from math import ceil
 
 # TODO: high level configs/globals CITY=sf,Ottawa, or istanbul, DEBUG=True or False
-CITY = "sf"
-DEBUG = False
-REPO_PATH
+
 
 
 def run():  
@@ -21,14 +19,14 @@ def run():
     
    #TODO: switch statement off of global config for city.
 
-   #addObjects(getOttawaData())
-   #createOttawaCamera()
+   addObjects(getOttawaData())
+   createOttawaCamera()
 
    #addObjects(getSfData())
    #createSfCamera()
    
-   addObjects(getIstanbulData())
-   createIstanbulCamera()
+   #addObjects(getIstanbulData())
+   #createIstanbulCamera()
 
 
    # Add two suns, not standard practice...but best lighting.
@@ -58,7 +56,7 @@ def createWater():
 #TODO: abstract out common camera pieces, maybe even automate based on bounds of data set.
 def createOttawaCamera():
    # add camera
-   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(15, 5, 5.66), rotation=(1.5708,0,1.14159))
+   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(15, 5, 3.66), rotation=(1.5708,0,1.14159))
    # Camera is current selected item because we just created camera
    bpy.context.object.data.type = 'PANO'
    bpy.context.object.data.cycles.panorama_type = 'EQUIRECTANGULAR'
@@ -80,7 +78,7 @@ def createOttawaCamera():
    # near last frame
    bpy.context.scene.frame_set(bpy.context.scene.frame_end - 15)
    # move camera up
-   bpy.ops.transform.translate(value=(0,0, 8))
+   bpy.ops.transform.translate(value=(0,0,9))
    # snapshot (blender will interprit the movement between frames)
    bpy.ops.anim.keyframe_insert_menu(type='Location')
     
@@ -113,7 +111,6 @@ def createSfCamera():
    # snapshot (blender will interprit the movement between frames)
    bpy.ops.anim.keyframe_insert_menu(type='Location')
     
-
 def createIstanbulCamera():
 
    # add camera
@@ -201,7 +198,7 @@ def getSfData():
         'y': (float(row['lat']) - 37.7) * 380,
         'z': 1,
         'startFrame': (float(issue_date[0]) - 1948)*10+ float(issue_date[1]) * 2,
-        'colour': (0.20 * (float(issue_date[0][:-1]) - 194), 0.7, 0.7),
+        'colour': (0.15 * (float(issue_date[0][:-1]) - 194), 0.7, 0.7),
         'colourName': "aaMaterialxxz" + issue_date[0][:-1] # Truncate last digit of year, to get decade.
       })
 
