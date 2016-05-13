@@ -5,37 +5,53 @@ import csv
 #from dateutil.parser import parse
 from datetime import datetime
 from math import ceil
+import os 
 
-# TODO: high level configs/globals CITY=sf,Ottawa, or istanbul, DEBUG=True or False
+DEBUG=True
+# Switch for city
+CITY = "ottawa" 
 
+# Absolute path to your repo.
+path, filename = os.path.split(os.path.dirname(os.path.realpath(__file__)))
+REPO_PATH = path + '/'
+
+# csv path
+CSV_PATH = 'TODO: currently 1:1 data set for cities, so hardcoded below'
 
 
 def run():  
-   # Setup Scene.
-   scn = bpy.context.scene
-   scn.frame_start = 1
-   scn.frame_end = 801
-   bpy.context.scene.layers[3] = True
-    
-   #TODO: switch statement off of global config for city.
-
-   addObjects(getOttawaData())
-   createOttawaCamera()
-
-   #addObjects(getSfData())
-   #createSfCamera()
+  global CSV_PATH
+  # Setup Scene.
+  scn = bpy.context.scene
+  scn.frame_start = 1
+  scn.frame_end = 801
+  bpy.context.scene.layers[3] = True
+  
+  # TODO: hide/unhide right layers for each city.
+  if CITY == "ottawa":
+    CSV_PATH = REPO_PATH + 'data/ottawa-publicly-accessible-computers.csv'
+    addObjects(getOttawaData())
+    createOttawaCamera()
+  elif CITY == "sf":
+    CSV_PATH = REPO_PATH + 'data/alcohol_locations.csv'
+    addObjects(getSfData())
+    createSfCamera()
+  elif CITY == "istanbul":
+    CSV_PATH = REPO_PATH + 'data/tweetsIstanbul.csv'
+    addObjects(getIstanbulData())
+    createIstanbulCamera()
+  else:
+    print("unrecognized CITY name, try: sf, ottawa, or istanbul")
    
-   #addObjects(getIstanbulData())
-   #createIstanbulCamera()
 
 
-   # Add two suns, not standard practice...but best lighting.
-   bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(0, 0, 20))
-   bpy.ops.transform.rotate(value=0.45, axis=(-0.172023, 0.980755, -0.0923435), constraint_axis=(False, False, False), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
-   bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(3, 3, 23))
-   bpy.ops.transform.rotate(value=0.45, axis=(-0.17, 0.98, -0.09), constraint_axis=(False, False, False), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
+  # Add two suns, not standard practice...but best lighting.
+  bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(0, 0, 20))
+  bpy.ops.transform.rotate(value=0.45, axis=(-0.172023, 0.980755, -0.0923435), constraint_axis=(False, False, False), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
+  bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(3, 3, 23))
+  bpy.ops.transform.rotate(value=0.45, axis=(-0.17, 0.98, -0.09), constraint_axis=(False, False, False), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
 
-   createWater()
+  createWater()
 
 
 def createWater():
@@ -150,8 +166,7 @@ def getOttawaData():
   return_data = []
   mod_counter = 0
 
-  #reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/data/ottawa-publicly-accessible-computers.csv', newline=''), delimiter=',')
-  reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/data/ottawa-publicly-accessible-computers.csv', newline=''), delimiter=',')
+  reader = csv.DictReader(open(CSV_PATH, newline=''), delimiter=',')
   for row in reader:
     #print(row['License_Ty'])
     mod_counter = mod_counter + 1
@@ -184,8 +199,7 @@ def getSfData():
 
   return_data = []
 
-  #reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/data/alcohol_locations.csv', newline=''), delimiter=',')
-  reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/data/alcohol_locations.csv', newline=''), delimiter=',')
+  reader = csv.DictReader(open(CSV_PATH, newline=''), delimiter=',')
   for row in reader:
     mod_counter = mod_counter + 1
     if row['License_Ty'] == '21':
@@ -214,8 +228,7 @@ def getIstanbulData():
 
   return_data = []
 
-  #reader = csv.DictReader(open('/Users/nickbreen/Code/vr-dataviz/data/tweetsIstanbul.csv', newline=''), delimiter=',')
-  reader = csv.DictReader(open('/Users/drustsmith/vr-dataviz/data/tweetsIstanbul.csv', newline=''), delimiter=',')
+  reader = csv.DictReader(open(CSV_PATH, newline=''), delimiter=',')
   for row in reader:
     mod_counter = mod_counter + 1
     if DEBUG and (mod_counter% MOD_DEBUG) != 0:
