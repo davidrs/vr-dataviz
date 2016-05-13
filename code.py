@@ -7,16 +7,21 @@ from datetime import datetime
 from math import ceil
 import os 
 
+# If true, we only create a subset of data points.
 DEBUG=True
-# Switch for city
+# If DEBUG is true, this is how frequently to take a sample from the dataset
+# ie. 5 would take every 5th row from the csv.
+MOD_DEBUG = 5
+
+# Switch for city: sf, istanbul, or ottawa
 CITY = "ottawa" 
+
+# csv path
+CSV_PATH = 'TODO: currently 1:1 data set for cities, so hardcoded below'
 
 # Absolute path to your repo.
 path, filename = os.path.split(os.path.dirname(os.path.realpath(__file__)))
 REPO_PATH = path + '/'
-
-# csv path
-CSV_PATH = 'TODO: currently 1:1 data set for cities, so hardcoded below'
 
 
 def run():  
@@ -161,8 +166,6 @@ def createIstanbulCamera():
 # Return an array of objects of the form:
 # {x: 123, y:32, z:22, startFrame: 1234, colour: (0.5, 0.2, 0.8), colourName: 'someNameForThisColour'}
 def getOttawaData():
-  DEBUG = True
-  MOD_DEBUG = 1
   return_data = []
   mod_counter = 0
 
@@ -192,9 +195,6 @@ def getOttawaData():
 # Return an array of objects of the form:
 # {x: 123, y:32, z:22, startFrame: 1234, colour: (0.5, 0.2, 0.8), colourName: 'someNameForThisColour'}
 def getSfData():
-  # Add debug variable, if true, than only draw the first 20 cubes
-  DEBUG = False
-  MOD_DEBUG = 5# to get a distributed sample.
   mod_counter = 0
 
   return_data = []
@@ -221,9 +221,6 @@ def getSfData():
 # Return an array of objects of the form:
 # {x: 123, y:32, z:22, startFrame: 1234, colour: (0.5, 0.2, 0.8), colourName: 'someNameForThisColour'}
 def getIstanbulData():
-  # Add debug variable, if true, than only draw the first 20 cubes
-  DEBUG = False
-  MOD_DEBUG = 5# to get a distributed sample.
   mod_counter = 0
 
   return_data = []
