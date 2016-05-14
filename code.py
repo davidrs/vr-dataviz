@@ -8,13 +8,13 @@ from math import ceil
 import os 
 
 # If true, we only create a subset of data points.
-DEBUG=True
+DEBUG=False
 # If DEBUG is true, this is how frequently to take a sample from the dataset
 # ie. 5 would take every 5th row from the csv.
 MOD_DEBUG = 5
 
 # Switch for city: sf, istanbul, or ottawa
-CITY = "ottawa" 
+CITY = "sf" 
 
 # csv path
 CSV_PATH = 'TODO: currently 1:1 data set for cities, so hardcoded below'
@@ -73,69 +73,21 @@ def createWater():
    ob = bpy.context.object
    ob.data.materials.append(mat)
 
-
-#TODO: abstract out common camera pieces, maybe even automate based on bounds of data set.
+# TODO: named params so it's more readable.
 def createOttawaCamera():
-   # add camera
-   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(15, 5, 3.66), rotation=(1.5708,0,1.14159))
-   # Camera is current selected item because we just created camera
-   bpy.context.object.data.type = 'PANO'
-   bpy.context.object.data.cycles.panorama_type = 'EQUIRECTANGULAR'
-   # not working: bpy.context.scene.format = 'MPEG4'
-   # not working: bpy.context.scene.codec = 'MPEG4'
-   
-   # set frame to frame 1
-   bpy.context.scene.frame_set(1)
-   # snapshot
-   bpy.ops.anim.keyframe_insert_menu(type='Location')
-   
-   # move camera to frame 300
-   bpy.context.scene.frame_set(ceil(bpy.context.scene.frame_end/2))
-   # move camera down
-   bpy.ops.transform.translate(value=(-22, -20, -0.6))
-   # snapshot (blender will interprit the movement between frames)
-   bpy.ops.anim.keyframe_insert_menu(type='Location')
-     
-   # near last frame
-   bpy.context.scene.frame_set(bpy.context.scene.frame_end - 15)
-   # move camera up
-   bpy.ops.transform.translate(value=(0,0,9))
-   # snapshot (blender will interprit the movement between frames)
-   bpy.ops.anim.keyframe_insert_menu(type='Location')
+  createCameraCommon((15, 5, 3.66), (-22, -20, -0.6), (0,0, 9))
     
 def createSfCamera():
+  createCameraCommon((-24, 50, 3.66), (23, -18, -0.6), (0,0, 5))
 
-   # add camera
-   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(-24, 50, 3.66), rotation=(1.5708,0,3.14159))
-   # Camera is current selected item because we just created camera
-   bpy.context.object.data.type = 'PANO'
-   bpy.context.object.data.cycles.panorama_type = 'EQUIRECTANGULAR'
-   # not working: bpy.context.scene.format = 'MPEG4'
-   # not working: bpy.context.scene.codec = 'MPEG4'
-   
-   # set frame to frame 1
-   bpy.context.scene.frame_set(1)
-   # snapshot
-   bpy.ops.anim.keyframe_insert_menu(type='Location')
-   
-   # move camera to frame 300
-   bpy.context.scene.frame_set(ceil(bpy.context.scene.frame_end/2))
-   # move camera down
-   bpy.ops.transform.translate(value=(23, -18, -0.6))
-   # snapshot (blender will interprit the movement between frames)
-   bpy.ops.anim.keyframe_insert_menu(type='Location')
-     
-   # near last frame
-   bpy.context.scene.frame_set(bpy.context.scene.frame_end - 15)
-   # move camera up
-   bpy.ops.transform.translate(value=(0,0, 5))
-   # snapshot (blender will interprit the movement between frames)
-   bpy.ops.anim.keyframe_insert_menu(type='Location')
     
 def createIstanbulCamera():
+  createCameraCommon((-24, 50, 2.66), (23, -18, -0.6), (0,0, 7))
 
+
+def createCameraCommon(start_location, translation1, translation2):
    # add camera
-   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=(-24, 50, 2.66), rotation=(1.5708,0,3.14159))
+   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=start_location, rotation=(1.5708,0,3.14159))
    # Camera is current selected item because we just created camera
    bpy.context.object.data.type = 'PANO'
    bpy.context.object.data.cycles.panorama_type = 'EQUIRECTANGULAR'
@@ -150,14 +102,14 @@ def createIstanbulCamera():
    # move camera to frame 300
    bpy.context.scene.frame_set(ceil(bpy.context.scene.frame_end/2))
    # move camera down
-   bpy.ops.transform.translate(value=(23, -18, -0.6))
+   bpy.ops.transform.translate(value=translation1)
    # snapshot (blender will interprit the movement between frames)
    bpy.ops.anim.keyframe_insert_menu(type='Location')
      
    # near last frame
    bpy.context.scene.frame_set(bpy.context.scene.frame_end - 15)
    # move camera up
-   bpy.ops.transform.translate(value=(0,0, 7))
+   bpy.ops.transform.translate(value=translation2)
    # snapshot (blender will interprit the movement between frames)
    bpy.ops.anim.keyframe_insert_menu(type='Location')
 
@@ -202,18 +154,21 @@ def getSfData():
   reader = csv.DictReader(open(CSV_PATH, newline=''), delimiter=',')
   for row in reader:
     mod_counter = mod_counter + 1
+    # Filter which rows are used based on the License_Ty column.
     if row['License_Ty'] == '21':
       if DEBUG and (mod_counter% MOD_DEBUG) != 0:
            continue;
 
       issue_date = row['Orig_Iss_D'].split('/')
+      decade = (float(issue_date[0][:-1]) - 194)
+      
       return_data.append({
         'x': (float(row['lng']) + 122.41) * 380, 
         'y': (float(row['lat']) - 37.7) * 380,
-        'z': 1,
-        'startFrame': (float(issue_date[0]) - 1948)*10+ float(issue_date[1]) * 2,
-        'colour': (0.15 * (float(issue_date[0][:-1]) - 194), 0.7, 0.7),
-        'colourName': "aaMaterialxxz" + issue_date[0][:-1] # Truncate last digit of year, to get decade.
+        'z': 5.5 + float(issue_date[1])*0.05,
+        'startFrame': (float(issue_date[0]) - 1949) * 10 + float(issue_date[1])*2 - 30,
+        'colour': ( decade*0.1, 0.1 + decade*0.15,  0.2 + decade*0.11),
+        'colourName': "CubeMaterialz" + issue_date[0][:-1] # Truncate last digit of year, to get decade.
       })
 
   return return_data
@@ -237,10 +192,8 @@ def getIstanbulData():
       'z': (float(row['follower_count']) / 100 + 0.2),
       'startFrame': mod_counter,
       'colour': (0.15, 0.7, 0.7), #TODO off of row["source"]
-      'colourName': "tweet" # Truncate last digit of year, to get decade.
+      'colourName': "tweet"
     })
-    #if mod_counter>3:
-    #b4    break
 
   return return_data
 
@@ -257,10 +210,10 @@ def addObjects(all_points):
      z = point['z']
      
      # set the starting frame
-     bpy.context.scene.frame_set(point['startFrame'] - 24)
+     bpy.context.scene.frame_set(point['startFrame'])
      #bpy.ops.anim.change_frame(frame = 1)
      bpy.ops.mesh.primitive_cube_add(radius=0.35,location=(x,y,(-z * 0.35))) 
-     bpy.ops.transform.resize(value=(1, 1, 2*z*0.35), constraint_axis=(False, False, True), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
+     bpy.ops.transform.resize(value=(0.05, 0.05, 2*z*0.35), constraint_axis=(False, False, True), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
 
      ob = bpy.context.object
      me = ob.data
@@ -288,8 +241,8 @@ def addObjects(all_points):
      # Create keyframe
      bpy.ops.anim.keyframe_insert_menu(type='Location')
      
-     # Move to year keyframe
-     appear_frame = point['startFrame'] * 2
+     # Move to end keyframe (TODO: add option animation_duration key
+     appear_frame = point['startFrame'] + 75
      bpy.context.scene.frame_set(appear_frame)
      # do something with the object. A translation, in this case
      bpy.ops.transform.translate(value=(0, 0, z*0.35))
