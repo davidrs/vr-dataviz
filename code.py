@@ -14,7 +14,7 @@ DEBUG=False
 MOD_DEBUG = 5
 
 # Switch for city: sf, istanbul, or ottawa
-CITY = "sf" 
+CITY = "ottawa" 
 
 # csv path
 CSV_PATH = 'TODO: currently 1:1 data set for cities, so hardcoded below'
@@ -32,23 +32,41 @@ def run():
   scn.frame_end = 801
   bpy.context.scene.layers[3] = True
   
+  # array index 3 maps to layer 4
+  dynamic_layer = 3
+  
+  # Delete dynamic objects.
+  generated_objects = [ob for ob in bpy.context.scene.objects if ob.layers[dynamic_layer]]
+  for obj in generated_objects:
+      print(obj)
+      obj.select =True
+      bpy.ops.object.delete() 
+  
+  # hide city layers
+  bpy.context.scene.layers[0] = False
+  bpy.context.scene.layers[1] = False
+  bpy.context.scene.layers[2] = False
+  bpy.context.scene.layers[dynamic_layer] = True # sets dynamic layer to active.
+
   # TODO: hide/unhide right layers for each city.
   if CITY == "ottawa":
     CSV_PATH = REPO_PATH + 'data/ottawa-publicly-accessible-computers.csv'
     addObjects(getOttawaData())
     createOttawaCamera()
+    bpy.context.scene.layers[1] = True # must be after all objects are added.
   elif CITY == "sf":
     CSV_PATH = REPO_PATH + 'data/alcohol_locations.csv'
     addObjects(getSfData())
     createSfCamera()
+    bpy.context.scene.layers[0] = True # must be after all objects are added.
   elif CITY == "istanbul":
     CSV_PATH = REPO_PATH + 'data/tweetsIstanbul.csv'
     addObjects(getIstanbulData())
     createIstanbulCamera()
+    bpy.context.scene.layers[2] = True # must be after all objects are added.
   else:
     print("unrecognized CITY name, try: sf, ottawa, or istanbul")
    
-
 
   # Add two suns, not standard practice...but best lighting.
   bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(0, 0, 20))
@@ -80,39 +98,8 @@ def createOttawaCamera():
 def createSfCamera():
   createCameraCommon((-24, 50, 3.66), (23, -18, -0.6), (0,0, 5))
 
-    
 def createIstanbulCamera():
   createCameraCommon((-24, 50, 2.66), (23, -18, -0.6), (0,0, 7))
-
-
-def createCameraCommon(start_location, translation1, translation2):
-   # add camera
-   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=start_location, rotation=(1.5708,0,3.14159))
-   # Camera is current selected item because we just created camera
-   bpy.context.object.data.type = 'PANO'
-   bpy.context.object.data.cycles.panorama_type = 'EQUIRECTANGULAR'
-   # not working: bpy.context.scene.format = 'MPEG4'
-   # not working: bpy.context.scene.codec = 'MPEG4'
-   
-   # set frame to frame 1
-   bpy.context.scene.frame_set(1)
-   # snapshot
-   bpy.ops.anim.keyframe_insert_menu(type='Location')
-   
-   # move camera to frame 300
-   bpy.context.scene.frame_set(ceil(bpy.context.scene.frame_end/2))
-   # move camera down
-   bpy.ops.transform.translate(value=translation1)
-   # snapshot (blender will interprit the movement between frames)
-   bpy.ops.anim.keyframe_insert_menu(type='Location')
-     
-   # near last frame
-   bpy.context.scene.frame_set(bpy.context.scene.frame_end - 15)
-   # move camera up
-   bpy.ops.transform.translate(value=translation2)
-   # snapshot (blender will interprit the movement between frames)
-   bpy.ops.anim.keyframe_insert_menu(type='Location')
-
 
 
 # Return an array of objects of the form:
@@ -127,7 +114,6 @@ def getOttawaData():
     mod_counter = mod_counter + 1
     if DEBUG and (mod_counter% MOD_DEBUG) != 0:
          continue;
-    #print(row["ADDRESS_EN"])
     #TODO: helper to get lat,lng max, min, and avg to avoid manual calbiration.
     return_data.append({
         'x': (float(row['lng']) + 75.63) * 120,
@@ -137,11 +123,6 @@ def getOttawaData():
         'colour': (0.6, 0.9, 0.6),
         'colourName': "MaterialOttawa"
     })
-    #if(mod_counter > 2):
-     # break
-    
-  print(return_data)
-
   return return_data
 
 # Return an array of objects of the form:
@@ -252,6 +233,36 @@ def addObjects(all_points):
  
     # TODO: remove all materials we've created and no longer need.
    return
+
+
+def createCameraCommon(start_location, translation1, translation2):
+   # add camera
+   bpy.ops.object.camera_add(view_align=True, enter_editmode=False, location=start_location, rotation=(1.5708,0,3.14159))
+   # Camera is current selected item because we just created camera
+   bpy.context.object.data.type = 'PANO'
+   bpy.context.object.data.cycles.panorama_type = 'EQUIRECTANGULAR'
+   # not working: bpy.context.scene.format = 'MPEG4'
+   # not working: bpy.context.scene.codec = 'MPEG4'
+   
+   # set frame to frame 1
+   bpy.context.scene.frame_set(1)
+   # snapshot
+   bpy.ops.anim.keyframe_insert_menu(type='Location')
+   
+   # move camera to frame 300
+   bpy.context.scene.frame_set(ceil(bpy.context.scene.frame_end/2))
+   # move camera down
+   bpy.ops.transform.translate(value=translation1)
+   # snapshot (blender will interprit the movement between frames)
+   bpy.ops.anim.keyframe_insert_menu(type='Location')
+     
+   # near last frame
+   bpy.context.scene.frame_set(bpy.context.scene.frame_end - 15)
+   # move camera up
+   bpy.ops.transform.translate(value=translation2)
+   # snapshot (blender will interprit the movement between frames)
+   bpy.ops.anim.keyframe_insert_menu(type='Location')
+
 
 if __name__ == "__main__":
    run()
