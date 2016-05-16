@@ -14,7 +14,7 @@ DEBUG=False
 MOD_DEBUG = 5
 
 # Switch for city: sf, istanbul, or ottawa
-CITY = "ottawa" 
+CITY = "sf" 
 
 # csv path
 CSV_PATH = 'TODO: currently 1:1 data set for cities, so hardcoded below'
@@ -42,41 +42,44 @@ def run():
       obj.select =True
       bpy.ops.object.delete() 
   
-  # hide city layers
+  # hide city layers :TODO: smart enable based on which city we're doing.
   bpy.context.scene.layers[0] = False
   bpy.context.scene.layers[1] = False
   bpy.context.scene.layers[2] = False
   bpy.context.scene.layers[dynamic_layer] = True # sets dynamic layer to active.
 
+  createLight()
+  createWater()
+  
   # TODO: hide/unhide right layers for each city.
   if CITY == "ottawa":
     CSV_PATH = REPO_PATH + 'data/ottawa-publicly-accessible-computers.csv'
     addObjects(getOttawaData())
     createOttawaCamera()
-    bpy.context.scene.layers[1] = True # must be after all objects are added.
+    bpy.context.scene.layers[1] = True
   elif CITY == "sf":
     CSV_PATH = REPO_PATH + 'data/alcohol_locations.csv'
     addObjects(getSfData())
     createSfCamera()
-    bpy.context.scene.layers[0] = True # must be after all objects are added.
+    bpy.context.scene.layers[0] = True
   elif CITY == "istanbul":
     CSV_PATH = REPO_PATH + 'data/tweetsIstanbul.csv'
     addObjects(getIstanbulData())
     createIstanbulCamera()
-    bpy.context.scene.layers[2] = True # must be after all objects are added.
+    bpy.context.scene.layers[2] = True
   else:
     print("unrecognized CITY name, try: sf, ottawa, or istanbul")
-   
 
+
+
+def createLight():
   # Add two suns, not standard practice...but best lighting.
   bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(0, 0, 20))
   bpy.ops.transform.rotate(value=0.45, axis=(-0.172023, 0.980755, -0.0923435), constraint_axis=(False, False, False), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
   bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(3, 3, 23))
   bpy.ops.transform.rotate(value=0.45, axis=(-0.17, 0.98, -0.09), constraint_axis=(False, False, False), constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED', proportional_edit_falloff='SMOOTH', proportional_size=1)
 
-  createWater()
-
-
+    
 def createWater():
    # Add a plane
    bpy.ops.mesh.primitive_plane_add(radius=100, location=(0, 0, 0))
