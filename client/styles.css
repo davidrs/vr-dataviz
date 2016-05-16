@@ -1,4 +1,7 @@
 .footer {
+    border-top: #888 1px dashed;
+    padding-top: 3px;
+    margin-top: 5px;
     height: 50px;
 }
 .code-for-sf-link {
@@ -10,4 +13,14 @@
     top: 0px;
     position: relative;
     font-weight: bold;
+}
+
+.vr-container{
+	max-width: 750px;
+}
+
+
+.nav-tabs {
+    display: block;
+    float: right;
 }
