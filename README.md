@@ -11,10 +11,8 @@ Additional cities are welcome.
 
 
 ## Demo (Open on your Phone for Best Experience)
-
-- SF: https://www.youtube.com/watch?v=mL7tVlfyWhk
-- Ottawa: https://youtu.be/pth3DSH8hTM
-- Istanbul: https://www.youtube.com/watch?v=5qzAHcPoSqg
+https://www.youtube.com/playlist?list=PLXYeZ3VwLuLsYzMd9unp7_Ig_GJsjh3J8
+Current cities with videos: SF, Ottawa, Istanbul
 
 ![Alt text](sample.png?raw=true "Sample Render")
 
@@ -84,11 +82,8 @@ pip install geopy (used for geocoding addresses into lat and longs)
 
 
 ## TODOs
-- Programatically delete all objects in layer 4 before creating all the content.
 - Make the lat, lng shift & scale more generic, less hardcoded.
 - Find solution to no legend for colours.
-- Cleanely seperate config values from generic code.
-
 
 
 ## Blender Shortcuts and Tips
