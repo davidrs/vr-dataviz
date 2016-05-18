@@ -1,5 +1,7 @@
 # vr-dataviz
 
+![Alt text](designDiagram.png?raw=true "System diagram")
+
 This is a simple pipeline for taking in a CSV with a ```lat``` and ```lng``` column and generating a 360 video.
 The code is written in Python and is animated/rendered in Blender3D.
 Blender3D is an awesome free and open source 3d modeling tool.
