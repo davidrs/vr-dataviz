@@ -16,7 +16,7 @@ Additional cities are welcome.
 https://www.youtube.com/playlist?list=PLXYeZ3VwLuLsYzMd9unp7_Ig_GJsjh3J8
 Current cities with videos: SF, Ottawa, Istanbul
 
-![Alt text](sample.png?raw=true "Sample Render")
+![Alt text](sample.jpg?raw=true "Sample Render")
 
 
 ## Running the code
